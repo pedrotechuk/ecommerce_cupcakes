@@ -99,66 +99,68 @@
         </div>
     </div>
 
-    <div x-show="open" style="display: none;" class="fixed inset-0 z-50 lg:hidden" x-on:keydown.escape.window="open = false">
-        <div class="fixed inset-0 bg-mocha-900 opacity-60"
-             x-show="open"
-             x-transition:enter="ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-60"
-             x-transition:leave="ease-in duration-150" x-transition:leave-start="opacity-60" x-transition:leave-end="opacity-0"
-             @click="open = false"></div>
+    <template x-teleport="body">
+        <div x-show="open" style="display: none;" class="fixed inset-0 z-50 lg:hidden" x-on:keydown.escape.window="open = false">
+            <div class="fixed inset-0 bg-mocha-900 opacity-60"
+                 x-show="open"
+                 x-transition:enter="ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-60"
+                 x-transition:leave="ease-in duration-150" x-transition:leave-start="opacity-60" x-transition:leave-end="opacity-0"
+                 @click="open = false"></div>
 
-        <div class="fixed inset-y-0 right-0 w-full max-w-xs bg-white shadow-xl flex flex-col"
-             x-show="open"
-             x-transition:enter="ease-out duration-200" x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0"
-             x-transition:leave="ease-in duration-150" x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full">
-            <div class="flex items-center justify-between px-4 h-16 border-b border-cream-200 shrink-0">
-                <span class="font-display text-lg font-bold text-brand-600">🧁 Cupcakes</span>
-                <button @click="open = false" class="p-2 rounded-lg text-mocha-500 hover:bg-cream-100" aria-label="Fechar menu">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
+            <div class="fixed inset-y-0 right-0 w-full max-w-xs bg-white shadow-xl flex flex-col"
+                 x-show="open"
+                 x-transition:enter="ease-out duration-200" x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0"
+                 x-transition:leave="ease-in duration-150" x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full">
+                <div class="flex items-center justify-between px-4 h-16 border-b border-cream-200 shrink-0">
+                    <span class="font-display text-lg font-bold text-brand-600">🧁 Cupcakes</span>
+                    <button @click="open = false" class="p-2 rounded-lg text-mocha-500 hover:bg-cream-100" aria-label="Fechar menu">
+                        <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
 
-            <form action="{{ route('products.index') }}" method="GET" class="p-4 border-b border-cream-100 shrink-0">
-                <label for="nav-search-mobile" class="sr-only">Buscar cupcakes</label>
-                <input id="nav-search-mobile" type="search" name="search" value="{{ request('search') }}" placeholder="Buscar cupcakes..."
-                       class="w-full rounded-full border-mocha-200 bg-cream-50 text-sm focus:border-brand-500 focus:ring-brand-500">
-            </form>
+                <form action="{{ route('products.index') }}" method="GET" class="p-4 border-b border-cream-100 shrink-0">
+                    <label for="nav-search-mobile" class="sr-only">Buscar cupcakes</label>
+                    <input id="nav-search-mobile" type="search" name="search" value="{{ request('search') }}" placeholder="Buscar cupcakes..."
+                           class="w-full rounded-full border-mocha-200 bg-cream-50 text-sm focus:border-brand-500 focus:ring-brand-500">
+                </form>
 
-            <div class="flex-1 overflow-y-auto py-2">
-                <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('home')">{{ __('Início') }}</x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">{{ __('Catálogo') }}</x-responsive-nav-link>
+                <div class="flex-1 overflow-y-auto py-2">
+                    <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('home')">{{ __('Início') }}</x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">{{ __('Catálogo') }}</x-responsive-nav-link>
+                    @auth
+                        <x-responsive-nav-link :href="route('cart.index')" :active="request()->routeIs('cart.*')">{{ __('Carrinho') }}</x-responsive-nav-link>
+                        <x-responsive-nav-link :href="route('orders.index')" :active="request()->routeIs('orders.*')">{{ __('Meus Pedidos') }}</x-responsive-nav-link>
+                        @if (auth()->user()->isAdmin())
+                            <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.*')">{{ __('Painel Admin') }}</x-responsive-nav-link>
+                        @endif
+                    @else
+                        <x-responsive-nav-link :href="route('login')">{{ __('Entrar') }}</x-responsive-nav-link>
+                        <x-responsive-nav-link :href="route('register')">{{ __('Cadastrar') }}</x-responsive-nav-link>
+                    @endauth
+                </div>
+
                 @auth
-                    <x-responsive-nav-link :href="route('cart.index')" :active="request()->routeIs('cart.*')">{{ __('Carrinho') }}</x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('orders.index')" :active="request()->routeIs('orders.*')">{{ __('Meus Pedidos') }}</x-responsive-nav-link>
-                    @if (auth()->user()->isAdmin())
-                        <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.*')">{{ __('Painel Admin') }}</x-responsive-nav-link>
-                    @endif
-                @else
-                    <x-responsive-nav-link :href="route('login')">{{ __('Entrar') }}</x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('register')">{{ __('Cadastrar') }}</x-responsive-nav-link>
+                    <div class="border-t border-cream-200 py-4 px-4 shrink-0">
+                        <div class="font-medium text-base text-mocha-800">{{ Auth::user()->name }}</div>
+                        <div class="text-sm text-mocha-400">{{ Auth::user()->email }}</div>
+
+                        <div class="mt-3 -mx-4 space-y-1">
+                            <x-responsive-nav-link :href="route('profile.edit')">{{ __('Meu Perfil') }}</x-responsive-nav-link>
+                            <x-responsive-nav-link :href="route('addresses.index')">{{ __('Meus Endereços') }}</x-responsive-nav-link>
+
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <x-responsive-nav-link :href="route('logout')"
+                                        onclick="event.preventDefault(); this.closest('form').submit();">
+                                    {{ __('Sair') }}
+                                </x-responsive-nav-link>
+                            </form>
+                        </div>
+                    </div>
                 @endauth
             </div>
-
-            @auth
-                <div class="border-t border-cream-200 py-4 px-4 shrink-0">
-                    <div class="font-medium text-base text-mocha-800">{{ Auth::user()->name }}</div>
-                    <div class="text-sm text-mocha-400">{{ Auth::user()->email }}</div>
-
-                    <div class="mt-3 -mx-4 space-y-1">
-                        <x-responsive-nav-link :href="route('profile.edit')">{{ __('Meu Perfil') }}</x-responsive-nav-link>
-                        <x-responsive-nav-link :href="route('addresses.index')">{{ __('Meus Endereços') }}</x-responsive-nav-link>
-
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <x-responsive-nav-link :href="route('logout')"
-                                    onclick="event.preventDefault(); this.closest('form').submit();">
-                                {{ __('Sair') }}
-                            </x-responsive-nav-link>
-                        </form>
-                    </div>
-                </div>
-            @endauth
         </div>
-    </div>
+    </template>
 </nav>
