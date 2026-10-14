@@ -10,9 +10,13 @@ class TrustProxies extends Middleware
     /**
      * The trusted proxies for this application.
      *
+     * Render (and most PaaS hosts) terminate TLS at their edge and forward
+     * plain HTTP to the container, so the app must trust the edge proxy to
+     * read X-Forwarded-Proto correctly and generate https:// URLs.
+     *
      * @var array<int, string>|string|null
      */
-    protected $proxies;
+    protected $proxies = '*';
 
     /**
      * The headers that should be used to detect proxies.
