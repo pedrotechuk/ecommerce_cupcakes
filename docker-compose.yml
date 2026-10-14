@@ -1,0 +1,97 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cupcakes_app
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: ${DB_DATABASE:-cupcakes}
+      DB_USERNAME: ${DB_USERNAME:-cupcakes}
+      DB_PASSWORD: ${DB_PASSWORD:-cupcakes_secret}
+    depends_on:
+      - db
+    networks:
+      - cupcakes
+
+  webserver:
+    image: nginx:alpine
+    container_name: cupcakes_webserver
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - cupcakes
+
+  db:
+    image: mysql:8.0
+    container_name: cupcakes_db
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-cupcakes}
+      MYSQL_USER: ${DB_USERNAME:-cupcakes}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-cupcakes_secret}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-cupcakes_root_secret}
+    ports:
+      - "3307:3306"
+    volumes:
+      - cupcakes_db_data:/var/lib/mysql
+    networks:
+      - cupcakes
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: cupcakes_phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: ${DB_USERNAME:-cupcakes}
+      PMA_PASSWORD: ${DB_PASSWORD:-cupcakes_secret}
+    depends_on:
+      - db
+    networks:
+      - cupcakes
+
+  node:
+    image: node:20-alpine
+    container_name: cupcakes_node
+    working_dir: /var/www/html
+    command: sh -c "npm install && npm run dev -- --host"
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "5173:5173"
+    networks:
+      - cupcakes
+
+  mailpit:
+    image: axllent/mailpit
+    container_name: cupcakes_mailpit
+    restart: unless-stopped
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    networks:
+      - cupcakes
+
+networks:
+  cupcakes:
+    driver: bridge
+
+volumes:
+  cupcakes_db_data:
+    driver: local

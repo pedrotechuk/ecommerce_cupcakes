@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#2A1810"/>
+  <ellipse cx="200" cy="260" rx="120" ry="90" fill="#6E4530"/>
+  <path d="M90 260 Q200 60 310 260 Z" fill="#B81F54"/>
+  <path d="M110 240 Q200 100 290 240 Z" fill="#EF4E82"/>
+  <circle cx="200" cy="95" r="14" fill="#FBBF24"/>
+  <text x="200" y="380" text-anchor="middle" font-family="sans-serif" font-size="20" fill="#FDF8F3">Cupcakes</text>
+</svg>
