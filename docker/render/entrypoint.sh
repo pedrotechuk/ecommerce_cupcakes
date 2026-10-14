@@ -6,17 +6,10 @@ php artisan config:clear
 php artisan migrate --force
 php artisan storage:link || true
 
-ORDER_COUNT=$(php -r "
-require '/var/www/html/vendor/autoload.php';
-\$app = require '/var/www/html/bootstrap/app.php';
-\$app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
-echo \App\Models\Order::count();
-")
-
-if [ "$ORDER_COUNT" = "0" ]; then
-    echo "Banco vazio, executando seeders de demonstração..."
-    php artisan db:seed --force
-fi
+# Seeders are idempotent (updateOrCreate/firstOrCreate), except OrderSeeder
+# which self-guards against re-running. Safe to run on every boot, so demo
+# data fixes ship on the next deploy without needing a manual DB reset.
+php artisan db:seed --force
 
 php artisan config:cache
 php artisan route:cache

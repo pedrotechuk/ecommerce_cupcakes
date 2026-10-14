@@ -37,7 +37,7 @@ class ProductSeeder extends Seeder
                     'name' => $product['name'],
                     'description' => "Delicioso {$product['name']}, feito artesanalmente pela Cupcakes com ingredientes selecionados.",
                     'price' => $product['price'],
-                    'image' => "products/{$slug}.svg",
+                    'image' => null,
                     'stock' => $product['stock'],
                     'is_active' => true,
                 ]

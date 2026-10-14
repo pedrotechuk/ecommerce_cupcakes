@@ -15,6 +15,10 @@ class OrderSeeder extends Seeder
 {
     public function run(): void
     {
+        if (Order::query()->exists()) {
+            return;
+        }
+
         $customers = User::query()->where('role', 'customer')->get();
         $products = Product::query()->get();
 

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#FFF8E9"/>
+  <ellipse cx="200" cy="260" rx="120" ry="90" fill="#FBBF24"/>
+  <path d="M90 260 Q200 70 310 260 Z" fill="#FFFFFF"/>
+  <path d="M110 240 Q200 110 290 240 Z" fill="#FFFDF5"/>
+  <rect x="175" y="90" width="7" height="12" fill="#EF4444" transform="rotate(20 178 96)"/>
+  <rect x="195" y="82" width="7" height="12" fill="#3B82F6" transform="rotate(-15 198 88)"/>
+  <rect x="215" y="92" width="7" height="12" fill="#22C55E" transform="rotate(25 218 98)"/>
+  <rect x="190" y="105" width="7" height="12" fill="#A855F7" transform="rotate(-10 193 111)"/>
+  <rect x="208" y="110" width="7" height="12" fill="#EC4899" transform="rotate(15 211 116)"/>
+  <text x="200" y="380" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#9A6B10">Festivo de Confeitos</text>
+</svg>

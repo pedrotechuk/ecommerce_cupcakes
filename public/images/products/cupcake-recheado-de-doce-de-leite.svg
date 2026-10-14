@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#FDF4E4"/>
+  <ellipse cx="200" cy="260" rx="120" ry="90" fill="#C98A3E"/>
+  <path d="M90 260 Q200 70 310 260 Z" fill="#D9A454"/>
+  <path d="M110 240 Q200 110 290 240 Z" fill="#F0C98A"/>
+  <path d="M190 150 Q200 180 210 150" stroke="#8C5A20" stroke-width="5" fill="none"/>
+  <circle cx="200" cy="95" r="12" fill="#8C5A20"/>
+  <text x="200" y="380" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#7A4E1A">Doce de Leite</text>
+</svg>

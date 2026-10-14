@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#F7FAEC"/>
+  <ellipse cx="200" cy="260" rx="120" ry="90" fill="#E3C16F"/>
+  <path d="M90 260 Q200 70 310 260 Z" fill="#FFF3D6"/>
+  <path d="M110 240 Q200 110 290 240 Z" fill="#FFFBEF"/>
+  <path d="M188 82 Q215 90 210 112 Q190 118 185 100 Q182 88 188 82 Z" fill="#F3D250"/>
+  <path d="M200 70 L205 78 L198 80 Z" fill="#4C9A4C"/>
+  <text x="200" y="380" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#6B6B2E">Vegano Banana</text>
+</svg>

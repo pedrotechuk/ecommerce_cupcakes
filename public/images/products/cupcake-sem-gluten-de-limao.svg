@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#FDFBE9"/>
+  <ellipse cx="200" cy="260" rx="120" ry="90" fill="#F4D35E"/>
+  <path d="M90 260 Q200 70 310 260 Z" fill="#FFF6D6"/>
+  <path d="M110 240 Q200 110 290 240 Z" fill="#FFFDF0"/>
+  <circle cx="200" cy="96" r="13" fill="#F6E27A"/>
+  <path d="M200 86 L200 106 M190 96 L210 96 M193 89 L207 103 M207 89 L193 103" stroke="#F4D35E" stroke-width="1.5"/>
+  <text x="200" y="380" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#8A6D1A">Sem Glúten Limão</text>
+</svg>

@@ -74,10 +74,14 @@ class Product extends Model
             return Storage::disk('public')->url($this->image);
         }
 
-        $slug = $this->category?->slug;
+        if (file_exists(public_path("images/products/{$this->slug}.svg"))) {
+            return asset("images/products/{$this->slug}.svg");
+        }
 
-        if ($slug && file_exists(public_path("images/placeholders/{$slug}.svg"))) {
-            return asset("images/placeholders/{$slug}.svg");
+        $categorySlug = $this->category?->slug;
+
+        if ($categorySlug && file_exists(public_path("images/placeholders/{$categorySlug}.svg"))) {
+            return asset("images/placeholders/{$categorySlug}.svg");
         }
 
         return asset('images/cupcake-placeholder.svg');
