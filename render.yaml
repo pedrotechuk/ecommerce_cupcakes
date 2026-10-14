@@ -29,5 +29,9 @@ services:
         value: sync
       - key: FILESYSTEM_DISK
         value: local
+      - key: PRODUCT_IMAGE_DISK
+        value: cloudinary
+      - key: CLOUDINARY_URL
+        sync: false
       - key: MAIL_MAILER
         value: log

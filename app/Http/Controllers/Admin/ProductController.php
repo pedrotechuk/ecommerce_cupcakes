@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\ProductRequest;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
@@ -32,7 +33,7 @@ class ProductController extends Controller
         $data['is_active'] = $request->boolean('is_active');
 
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('products', 'public');
+            $data['image'] = $this->storeProductImage($request->file('image'));
         }
 
         Product::create($data);
@@ -54,10 +55,10 @@ class ProductController extends Controller
 
         if ($request->hasFile('image')) {
             if ($product->image) {
-                Storage::disk('public')->delete($product->image);
+                Storage::disk(config('filesystems.product_image_disk', 'public'))->delete($product->image);
             }
 
-            $data['image'] = $request->file('image')->store('products', 'public');
+            $data['image'] = $this->storeProductImage($request->file('image'));
         }
 
         $product->update($data);
@@ -70,5 +71,16 @@ class ProductController extends Controller
         $product->delete();
 
         return back()->with('status', 'Produto removido.');
+    }
+
+    private function storeProductImage(UploadedFile $image): string
+    {
+        $disk = config('filesystems.product_image_disk', 'public');
+
+        if ($disk === 'cloudinary') {
+            return $image->storeOnCloudinary('products')->getPublicId();
+        }
+
+        return $image->store('products', 'public');
     }
 }

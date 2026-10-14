@@ -17,6 +17,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Product Image Disk
+    |--------------------------------------------------------------------------
+    |
+    | Disk used for product image uploads in the admin panel. Defaults to the
+    | local "public" disk; set to "cloudinary" when CLOUDINARY_URL is
+    | configured, since hosts like Render wipe local disk on every deploy.
+    |
+    */
+
+    'product_image_disk' => env('PRODUCT_IMAGE_DISK', 'public'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Filesystem Disks
     |--------------------------------------------------------------------------
     |
@@ -54,6 +67,10 @@ return [
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
             'throw' => false,
+        ],
+
+        'cloudinary' => [
+            'driver' => 'cloudinary',
         ],
 
     ],

@@ -67,6 +67,10 @@ class Product extends Model
     public function getImageUrlAttribute(): string
     {
         if ($this->image) {
+            if (config('filesystems.product_image_disk') === 'cloudinary') {
+                return cloudinary()->getImage($this->image)->toUrl();
+            }
+
             return Storage::disk('public')->url($this->image);
         }
 
