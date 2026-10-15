@@ -24,7 +24,19 @@ class CartController extends Controller
         $cart = $this->cartService->cartFor(auth()->user())->load('items.product');
         $shippingCost = $this->shippingCalculator->calculate($cart);
 
-        return view('cart.index', compact('cart', 'shippingCost'));
+        $cartItemsForJs = $cart->items->map(fn ($item) => [
+            'product_id' => $item->product_id,
+            'name' => $item->product->name,
+            'image' => $item->product->image_url,
+            'url' => route('products.show', $item->product),
+            'update_url' => route('cart.update', $item->product),
+            'destroy_url' => route('cart.destroy', $item->product),
+            'price' => (float) $item->product->price,
+            'max' => $item->product->stock,
+            'qty' => $item->quantity,
+        ])->values();
+
+        return view('cart.index', compact('cart', 'shippingCost', 'cartItemsForJs'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -66,9 +78,19 @@ class CartController extends Controller
         return back()->with('status', 'Carrinho atualizado.');
     }
 
-    public function destroy(Product $product): RedirectResponse
+    public function destroy(Request $request, Product $product): RedirectResponse|JsonResponse
     {
-        $this->cartService->removeItem(auth()->user(), $product);
+        $cart = $this->cartService->removeItem(auth()->user(), $product);
+
+        if ($request->wantsJson()) {
+            $shippingCost = $this->shippingCalculator->calculate($cart);
+
+            return response()->json([
+                'subtotal' => $cart->subtotal(),
+                'shipping' => $shippingCost,
+                'total' => $cart->subtotal() + $shippingCost,
+            ]);
+        }
 
         return back()->with('status', 'Produto removido do carrinho.');
     }
