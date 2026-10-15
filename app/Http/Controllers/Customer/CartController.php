@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Services\CartService;
 use App\Services\ShippingCalculator;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -40,13 +41,27 @@ class CartController extends Controller
         return back()->with('status', 'Produto adicionado ao carrinho.');
     }
 
-    public function update(Request $request, Product $product): RedirectResponse
+    public function update(Request $request, Product $product): RedirectResponse|JsonResponse
     {
         $data = $request->validate([
             'quantity' => ['required', 'integer', 'min:0'],
         ]);
 
-        $this->cartService->updateItemQuantity(auth()->user(), $product, $data['quantity']);
+        $cart = $this->cartService->updateItemQuantity(auth()->user(), $product, $data['quantity']);
+        $shippingCost = $this->shippingCalculator->calculate($cart);
+
+        if ($request->wantsJson()) {
+            $item = $cart->items->firstWhere('product_id', $product->id);
+
+            return response()->json([
+                'removed' => $item === null,
+                'quantity' => $item->quantity ?? 0,
+                'line_total' => $item ? $item->quantity * $product->price : 0,
+                'subtotal' => $cart->subtotal(),
+                'shipping' => $shippingCost,
+                'total' => $cart->subtotal() + $shippingCost,
+            ]);
+        }
 
         return back()->with('status', 'Carrinho atualizado.');
     }

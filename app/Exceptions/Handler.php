@@ -3,6 +3,8 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
+use Illuminate\Session\TokenMismatchException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -25,6 +27,21 @@ class Handler extends ExceptionHandler
     {
         $this->reportable(function (Throwable $e) {
             //
+        });
+
+        // A CSRF token mismatch usually means the session expired while a form
+        // was open (e.g. a slow cold start on Render). Instead of dumping the
+        // raw 419 page, bounce the user back to the form they submitted with
+        // a friendly message so they can just resubmit.
+        $this->renderable(function (TokenMismatchException $e, Request $request) {
+            if ($request->expectsJson()) {
+                return null;
+            }
+
+            return redirect()
+                ->back()
+                ->withInput($request->except(['password', 'password_confirmation']))
+                ->with('status', 'Sua sessão expirou por segurança. Tente novamente.');
         });
     }
 }
