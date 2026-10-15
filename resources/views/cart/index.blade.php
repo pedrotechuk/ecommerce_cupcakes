@@ -14,7 +14,7 @@
             </div>
         @else
             <div x-data="{
-                    items: @json($cartItemsForJs),
+                    items: {{ Illuminate\Support\Js::from($cartItemsForJs) }},
                     subtotal: {{ $cart->subtotal() }},
                     shipping: {{ $shippingCost }},
                     decrement(item) {
